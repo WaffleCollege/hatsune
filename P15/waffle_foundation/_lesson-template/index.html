@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天気予報</title>
+  <script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+  <h1>Waffle Foundations Classwork</h1>
+  <h2>Hit <font color="blue"> Cmd + Option + J</font> to open the dev console.</h2>
+  <h2>But first we give you this typing cat.</h2>
+  <img src="https://i.ibb.co/SN1SDhM/typing-fast-typing.gif">
+  <h3>
+    No one should ever have to look at a blank HTML page with no cats.<br>That's just a waste of pixels...
+  </h3>
+  <h1>天気予報</h1>
+  <h3 id="location">東京地方の天気</h3>
+  <p id="weather"></p>
+
+  <script>
+      function getTodaysForecast(regionCode) {
+          if (!/^\d{6}$/.test(regionCode)) {
+              console.log("正しい地域コードを入力してください。");
+              return;
+          }
+
+          fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${regionCode}.json`)
+              .then(response => response.json())
+              .then(data => {
+                  const tokyoForecast = data[0]['timeSeries'][0]['areas'].find(area => area['area']['name'] === '東京地方');
+                  const todayWeather = tokyoForecast['weather'][0];
+
+                  // HTMLに天気情報を表示
+                  document.getElementById('weather').textContent = todayWeather;
+              })
+              .catch(error => console.error('データの取得中にエラーが発生しました:', error));
+      }
+
+      // ページ読み込み時に天気情報を取得し表示する
+      document.addEventListener('DOMContentLoaded', function () {
+          getTodaysForecast('130000');
+      });
+  </script>
+</body>
+
+</html>
